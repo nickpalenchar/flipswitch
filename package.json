@@ -1,0 +1,29 @@
+{
+  "name": "switcheroo",
+  "version": "0.1.0",
+  "description": "Rename all your default branches on github",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "switcheroo": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickpalenchar/switcheroo.git"
+  },
+  "keywords": [
+    "branch"
+  ],
+  "author": "Nick Palenchar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nickpalenchar/switcheroo/issues"
+  },
+  "homepage": "https://github.com/nickpalenchar/switcheroo#readme",
+  "dependencies": {
+    "@octokit/rest": "^18.0.0",
+    "chalk": "^4.1.0"
+  }
+}
