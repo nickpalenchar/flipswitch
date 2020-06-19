@@ -1,0 +1,30 @@
+
+
+REQUEST OAUTH TOKEN
+Welcome!
+
+
+
+NOTICES:
+
+WARNING: This might have *unintended* consequences https://help.github.com/en/github/administering-a-repository/setting-the-default-branch
+
+Any CI/CD/Pipelines/Actions that name "master" explicitly will need to be updated manually
+
+SHOW # repos found to change. (action to list them)
+
+(v0.5) - search local repos:
+    SHOW # to update.
+
+
+---
+
+FOR EACH REPO
+
+git checkout (in tmp)
+
+git branch -m master <NEW=main>
+
+TODO: auth to change the default branch in settings.
+
+git push origin (CHECK REMOTE NAMES)
