@@ -33,7 +33,7 @@ class Cache {
         }).bind(this);
     }
 
-    clearCache() {
+    clear() {
         this.cache = {};
     }
 

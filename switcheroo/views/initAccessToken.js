@@ -1,7 +1,9 @@
 const chalk = require('chalk')
+const {say} = require("../util");
 const {githubAccess, INVALID_TOKEN} = require("../githubAccess");
 const prompt = require('prompt-sync')();
 const {View} = require("./_abstracts");
+const {permissionsReview} = require('./permissionsReview');
 
 const requestAccessToken = new View('RequestAccessToken', {
     /** Provides prompt for access token and verifies **/
@@ -41,7 +43,17 @@ const initAccessToken = new View('InitAccessToken', {
 
 const confirmUser = new View('ConfirmUser', {
     run: async function() {
-        const user = await githubAccess.getUserDetails()
+        const user = await githubAccess.getUserDetails();
+        say('You are currently logged in as:')
+        say(chalk.cyan(user.name));
+        say(chalk.cyan(user.email));
+        say.newline();
+        const answer = prompt('Does this look correct? [Y/n]: ');
+        console.log('>>>', answer)
+        if (/y/i.test(answer)) {
+            console.log('waatt??')
+            return { view: permissionsReview }
+        }
     }
 });
 
