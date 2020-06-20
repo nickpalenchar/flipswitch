@@ -65,7 +65,7 @@ class GithubAccess {
         cache.clear();
         !fs.existsSync(`${process.env.HOME}/.${APP_NAME}`) && fs.mkdirSync(`${process.env.HOME}/.${APP_NAME}`);
         fs.existsSync(TOKEN_PATH) && fs.unlinkSync(TOKEN_PATH)
-        fs.appendFileSync(TOKEN_PATH, token, {mode: 0o662});
+        fs.appendFileSync(TOKEN_PATH, token, {mode: 0o622});
         return true;
     }
 

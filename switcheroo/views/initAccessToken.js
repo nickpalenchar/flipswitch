@@ -41,9 +41,7 @@ const initAccessToken = new View('InitAccessToken', {
 
 const confirmUser = new View('ConfirmUser', {
     run: async function() {
-        console.log(await githubAccess.getUserDetails());
-        console.log('bye');
-        return null;
+        const user = await githubAccess.getUserDetails()
     }
 });
 
