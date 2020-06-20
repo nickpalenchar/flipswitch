@@ -25,6 +25,7 @@
   "dependencies": {
     "@octokit/rest": "^18.0.0",
     "chalk": "^4.1.0",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "terminal-kit": "^1.35.7"
   }
 }

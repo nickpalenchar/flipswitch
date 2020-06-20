@@ -1,9 +1,15 @@
-
+const chalk = require('chalk')
 
 class CliController {
 
     LOGLEVEL;
-    c = console;
+    c = {
+        log: console.log,
+        debug: console.debug,
+        info: console.info,
+        warn: console.warn,
+        error: console.error
+    };
     noop = () => undefined;
 
     constructor(level=1) {
@@ -34,7 +40,7 @@ class CliController {
         let result;
 
         while(view) {
-            this.c.debug('[ViewController] BEGIN VIEW ' + view.name)
+            this.c.debug(chalk.yellow('[ViewController] BEGIN VIEW ') + chalk.bgYellow(' '+view.name+' '))
             result = await view.run(...args);
             if (!result) {
                 this.c.debug('[ViewController] nothing returned, ending sequence.');
@@ -43,6 +49,7 @@ class CliController {
             this.c.debug('[ViewController] END VIEW ' + view.name + '\n');
             [view, args] = [result.view, result.args || [] ];
         }
+        process.exit(0);
     }
 }
 

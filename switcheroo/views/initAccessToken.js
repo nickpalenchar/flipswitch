@@ -9,8 +9,8 @@ const requestAccessToken = new View('RequestAccessToken', {
     /** Provides prompt for access token and verifies **/
 
     run: async function() {
-        console.log('\nYou will need to create a personal access token!')
-        console.log(chalk.blue('https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line'));
+        say('\nYou will need to create a personal access token!')
+        say(chalk.blue('https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line'));
         let token;
         while (true) {
             token = prompt.hide('Personal access token (hidden): ');
@@ -49,9 +49,7 @@ const confirmUser = new View('ConfirmUser', {
         say(chalk.cyan(user.email));
         say.newline();
         const answer = prompt('Does this look correct? [Y/n]: ');
-        console.log('>>>', answer)
         if (/y/i.test(answer)) {
-            console.log('waatt??')
             return { view: permissionsReview }
         }
     }
