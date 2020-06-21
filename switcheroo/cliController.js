@@ -1,4 +1,5 @@
 const chalk = require('chalk')
+const {assert} = require('./util');
 
 class CliController {
 
@@ -40,7 +41,8 @@ class CliController {
         let result;
 
         while(view) {
-            this.c.debug(chalk.yellow('[ViewController] BEGIN VIEW ') + chalk.bgYellow(' '+view.name+' '))
+            this.c.debug(chalk.yellow('[ViewController] BEGIN VIEW ') + chalk.bgYellow(' '+view.name+' ') +
+                (args.length ? chalk.red(` args = ${args}`) : ''));
             result = await view.run(...args);
             if (!result) {
                 this.c.debug('[ViewController] nothing returned, ending sequence.');
@@ -48,6 +50,7 @@ class CliController {
             }
             this.c.debug('[ViewController] END VIEW ' + view.name + '\n');
             [view, args] = [result.view, result.args || [] ];
+            assert(Array.isArray(args), 'Returning a view object with args: args must be an array of arguments')
         }
         process.exit(0);
     }

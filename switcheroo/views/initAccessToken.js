@@ -43,7 +43,7 @@ const initAccessToken = new View('InitAccessToken', {
 
 const confirmUser = new View('ConfirmUser', {
     run: async function() {
-        const user = await githubAccess.getUserDetails();
+        const user = await githubAccess.getAuthenticatedUserDetails();
         say('You are currently logged in as:')
         say(chalk.cyan(user.name));
         say(chalk.cyan(user.email));

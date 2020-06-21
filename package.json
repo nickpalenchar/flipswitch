@@ -24,6 +24,7 @@
   "homepage": "https://github.com/nickpalenchar/switcheroo#readme",
   "dependencies": {
     "@octokit/rest": "^18.0.0",
+    "axios": "^0.19.2",
     "chalk": "^4.1.0",
     "prompt-sync": "^4.2.0",
     "terminal-kit": "^1.35.7"
