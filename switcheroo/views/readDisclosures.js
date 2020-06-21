@@ -1,4 +1,5 @@
 const chalk = require("chalk");
+const {updateBranches} = require("./updateBranches");
 const {terminal} = require('terminal-kit')
 
 const {View} = require("./_abstracts");
@@ -31,6 +32,10 @@ const readDisclosures = new View('ReadDisclosures', {
             chalk.red(' Yes - I\'ve read the above disclosures & understand the consequences '),
             ' No - select different repos ',
             ' No - exit the program ']).promise;
+
+        if (answer.selectedIndex === 0) {
+            return {view: updateBranches, args: [reposToUpdate] }
+        }
     }
 });
 

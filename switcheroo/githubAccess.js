@@ -67,6 +67,21 @@ class GithubAccess {
         }
     }.bind(this));
 
+    async updateRepoDefaultBranch(repo, newBranchName) {
+        const owner = await this.getAuthenticatedUserDetails().then(u => u.login);
+        // TODO{0} - check that branch does not already exist.
+        try {
+            await this._agent.repos.update({
+                owner,
+                repo,
+                default_branch: newBranchName
+            });
+        }
+        catch (e) {
+            console.log(e) // TODO{0} - graceful error handling.
+        }
+    }
+
     async _getAllRepos(visibility='all', affiliation='owner,collaborator,organization_member') {
         /** Get's all repos, setting optional visibility according to
          *  Github api params https://developer.github.com/v3/repos/
