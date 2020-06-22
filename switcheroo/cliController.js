@@ -49,6 +49,9 @@ class CliController {
                 break;
             }
             this.c.debug('[ViewController] END VIEW ' + view.name + '\n');
+            if (typeof result === 'object' && !result.hasOwnProperty('view')) {
+                console.warn(chalk.red('[ViewController] WARN: Recieved an object but property .view is missing. This results in an exit.'))
+            }
             [view, args] = [result.view, result.args || [] ];
             assert(Array.isArray(args), 'Returning a view object with args: args must be an array of arguments')
         }

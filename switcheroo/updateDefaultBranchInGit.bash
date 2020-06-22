@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 switcheroo_main() {
   set -e
@@ -8,7 +8,7 @@ switcheroo_main() {
   local NEW_BRANCH=$3
   [[ -n "$4" ]] && local REPO_NAME=$4 || local REPO_NAME=$(echo $REPO | rev | cut -f 1 -d/ | rev)
 
-  git clone $REPO /tmp/$REPO_NAME
+  git clone -q $REPO /tmp/$REPO_NAME
   cd /tmp/$REPO_NAME
   git branch -m $OLD_BRANCH $NEW_BRANCH
   git push origin $NEW_BRANCH

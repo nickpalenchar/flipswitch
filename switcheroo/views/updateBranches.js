@@ -21,9 +21,9 @@ async function updateBranchOnRepo(repo, newBranchName='main') {
     //TODO{0} - prompt for another name than master
     const oldBranchName = repo.default_branch;
     try {
-        await branchUpdater.changeBranchNameInGit(repo.git_url, oldBranchName, newBranchName, repo.name);
+        await branchUpdater.changeBranchNameInGit(repo.clone_url, oldBranchName, newBranchName, repo.name);
         await githubAccess.updateRepoDefaultBranch(repo.name, newBranchName);
-        // await branchUpdater.deleteBranchOnRemote(repo.name, oldBranchName);
+        await branchUpdater.deleteBranchOnRemote(repo.name, oldBranchName);
     }
     catch (e) {
         //TODO{0} - propigate to error service?

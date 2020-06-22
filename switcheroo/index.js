@@ -3,15 +3,16 @@
 const chalk = require('chalk');
 
 const screens = require('./views');
+const {configureSingleRepo} = require("./views/configureRepoSearch");
 const {updateBranches} = require("./views/updateBranches");
 const {welcome} = require("./views/welcome");
 const {CliController} = require("./cliController");
 const { githubAccess: gh, INVALID_TOKEN } = require('./githubAccess');
 
-
+gh.initToken();
 const viewController = new CliController(3);
-
-viewController.run(updateBranches, [{name: 'tminus', git_url: 'https://github.com/nickpalenchar/tminus.git', default_branch: 'master'}])
+viewController.run(configureSingleRepo)
+// viewController.run(updateBranches, [{name: 'tminus', git_url: 'https://github.com/nickpalenchar/tminus.git', default_branch: 'master'}])
     .then(data => console.log('goodbye'))
     .catch(err => {
         console.log('it didnt quite work', err);

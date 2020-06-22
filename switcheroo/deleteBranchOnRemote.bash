@@ -1,13 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-main() {
-  set -e
+switcheroo_main() {
+  set -eu
 
-  REPO_DIR=$1
-  BRANCH=$2
-
+  local REPO_DIR=$1
+  local BRANCH=$2
+  echo repodirrr $REPO_DIR
   cd /tmp/$REPO_DIR
   git push origin --delete $BRANCH
 }
 
-main $@
+switcheroo_main $@

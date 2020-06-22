@@ -82,6 +82,10 @@ class GithubAccess {
         }
     }
 
+    async getRepo(owner, repo) {
+        return this._agent.repos.get({owner, repo}).then(r => r.data);
+    }
+
     async _getAllRepos(visibility='all', affiliation='owner,collaborator,organization_member') {
         /** Get's all repos, setting optional visibility according to
          *  Github api params https://developer.github.com/v3/repos/

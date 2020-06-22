@@ -1,16 +1,19 @@
+const util = require('util')
+const execFile = util.promisify(require('child_process').execFile);
 const { execFileSync, execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const { assert } = require('../util');
 
 async function changeBranchNameInGit(repoUrl='', oldBranch='', newBranch='', repoName='') {
-    await execFileSync(path.join(__dirname, '..', 'updateDefaultBranchInGit.bash'),
-        [repoUrl, oldBranch, newBranch, repoName]);
+    await execFile(path.join(__dirname, '..', 'updateDefaultBranchInGit.bash'),
+        [repoUrl, oldBranch, newBranch, repoName], {cwd: __dirname, shell: false, stdio: 'inherit'});
 }
 
 async function deleteBranchOnRemote(repoDir='', branch='') {
+    console.log('BRANCHHH?>>>>', repoDir, branch)
     execFileSync(path.join(__dirname, '..', 'deleteBranchOnRemote.bash'),
-        [repoDir, branch],  {shell: true});
+        [repoDir, branch], {cwd: __dirname, shell: false, stdio: 'inherit'});
 }
 
 function cleanUpTmpRepository(repoDir) {
