@@ -2,17 +2,29 @@
 const {View} = require("./_abstracts");
 const {githubAccess} = require('../githubAccess');
 const branchUpdater = require('../controllers/branchUpdater');
-const {say} = require("../util");
+const {terminal} = require('terminal-kit');
+const {say, assert} = require("../util");
 
 const updateBranches = new View('UpdateBranches', {
     run: async function(reposToUpdate) {
+        assert(reposToUpdate.length < 11);
         await githubAccess.initToken();
+        const progressBar = terminal.progressBar({
+            // width: 80,
+            title: 'Working...',
+            items: reposToUpdate.length,
+            percent: true,
+            eta: true
+        })
         let errors = [];
         for (let i = 0; i < reposToUpdate.length; i++) {
             var repo = reposToUpdate[i];
-            say(`updating ${repo.name}`);
+            progressBar.startItem(repo.name);
             await updateBranchOnRepo(repo) // TODO{0} - passing in options for different old/new branch rename here
+            progressBar.itemDone(repo.name);
         }
+        // progressBar.stop();
+
     }
 });
 
@@ -27,7 +39,7 @@ async function updateBranchOnRepo(repo, newBranchName='main') {
     }
     catch (e) {
         //TODO{0} - propigate to error service?
-        console.error(e);
+        // console.error(e);
     }
     finally {
         branchUpdater.cleanUpTmpRepository(repo.name);

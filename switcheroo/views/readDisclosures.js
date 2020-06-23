@@ -14,7 +14,7 @@ const readDisclosures = new View('ReadDisclosures', {
         say.newline();
         say(chalk.red("But first please review the following notices:"));
         say.newline();
-        say(chalk.inverse('Warning: Update the default branch'))
+        say(chalk.inverse('Warning: Updating the default branch'))
         say(`Changing your default branch can have unintended consequences that can affect new pull requests and clones. (More info: ${GITHUB_DEFAULT_BRANCH_TOPIC_URL})`);
         say.newline();
         say(chalk.inverse('Disclosure: You are using alpha-status software.'))
@@ -33,8 +33,9 @@ const readDisclosures = new View('ReadDisclosures', {
             ' No - select different repos ',
             ' No - exit the program ']).promise;
 
+        //TODO{0} - Remove the slice (10)
         if (answer.selectedIndex === 0) {
-            return {view: updateBranches, args: [reposToUpdate] }
+            return {view: updateBranches, args: [reposToUpdate.slice(0,10)] }
         }
     }
 });
