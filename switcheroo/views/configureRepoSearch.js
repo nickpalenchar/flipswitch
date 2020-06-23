@@ -11,16 +11,22 @@ const {terminal} = require('terminal-kit')
 
 const configureRepoSearch = new View('ConfigureRepoSearch', {
     run: async function() {
-        say(chalk.blue(`${APP_NAME} can rename branches on your repositories that are public, private, or both. You can also test with just an individual one.
+        say(chalk.cyan(`${APP_NAME} can rename branches on your repositories that are public, private, or both. You can also test with just an individual one.
         Which would you prefer?`));
         const choices = {
             'Public and private repos (most dangerous)': 'all',
             'Public repos only': 'public',
             'Private repos only': 'private',
-            'Specify one repo (safest)': 'single'
+            'Specify one repo         (safest)': 'single'
         }
 
-        const userResponse = await new terminal.singleColumnMenu(Object.keys(choices));
+        const userResponse = await new Promise(
+            (resolve, reject) => terminal.singleColumnMenu(Object.keys(choices), function (err, response) {
+                if (err) {
+                    reject(err);
+                }
+                resolve(response);
+            }));
 
         const answerKeyword = choices[userResponse.selectedText];
         if (answerKeyword === 'single') {
