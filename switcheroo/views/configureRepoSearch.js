@@ -3,7 +3,7 @@ const {readDisclosures} = require("./readDisclosures");
 const {githubAccess} = require("../githubAccess");
 const {gatherRepos} = require("./gatherRepos");
 const {updateBranches} = require("./updateBranches");
-const {say, sleep} = require("../util");
+const {say, ask, sleep} = require("../util");
 const {View} = require("./_abstracts");
 const {APP_NAME} = require('../configs.json');
 const {OPTIONS} = require('../options');
@@ -20,13 +20,7 @@ const configureRepoSearch = new View('ConfigureRepoSearch', {
             'Specify one repo         (safest)': 'single'
         }
 
-        const userResponse = await new Promise(
-            (resolve, reject) => terminal.singleColumnMenu(Object.keys(choices), function (err, response) {
-                if (err) {
-                    reject(err);
-                }
-                resolve(response);
-            }));
+        const userResponse = await ask.singleColumnMenu(Object.keys(choices), {exitOnCancel: true});
 
         const answerKeyword = choices[userResponse.selectedText];
         if (answerKeyword === 'single') {

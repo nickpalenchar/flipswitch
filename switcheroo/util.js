@@ -1,3 +1,37 @@
+const { terminal } = require('terminal-kit');
+
+
+const ask = {
+    singleColumnMenu: async function(choices, options) {
+        // A thin wrapper around terminal.singleColumnMenu that has some preferred options by default
+        // Most importantly, it allows for cancelling using CTRL+C, which can either return `null` or exit
+        // the process entirely.
+
+        // custom option exitOnCancel - makes ctrl+c invoke process.exit() rather than return null
+        const { exitOnCancel } = options;
+        delete options.exitOnCancel;
+
+        const defaultOptions = {cancelable: true,  keyBindings: {
+            'DOWN': 'next',
+            'UP': 'previous',
+            'CTRL_C': 'escape',
+            'ENTER': 'submit',
+            'KP_ENTER': 'submit'
+        }};
+        const finalOptions = Object.assign({}, defaultOptions, options);
+
+        const answer = await terminal.singleColumnMenu(choices, finalOptions).promise;
+
+        if (answer.canceled && exitOnCancel) {
+            process.exit(128);
+        }
+
+
+        return answer;
+    }
+}
+
+
 
 
 function say(...args) {
@@ -29,4 +63,4 @@ async function sleep(milliseconds) {
     })
 }
 
-module.exports = { say, assert, sleep };
+module.exports = { say, ask, assert, sleep };

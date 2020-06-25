@@ -14,9 +14,12 @@ const requestAccessToken = new View('RequestAccessToken', {
         let token;
         while (true) {
             token = prompt.hide('Personal access token (hidden): ');
+            if (token === null) {
+                return null;
+            }
             if(await githubAccess.updateToken(token) === true) {
                 const name = await githubAccess.getName();
-                console.log(chalk.green(`~ welcome, ${name} ~`));
+                console.log(chalk.green(`~ Welcome, ${name} ~`));
                 break;
             }
             console.log(chalk.yellow('That didn\'t quite work. Make sure the token is valid'));
@@ -37,6 +40,9 @@ const initAccessToken = new View('InitAccessToken', {
         if (accessStatus === "INVALID_TOKEN") {
             return { view: requestAccessToken }
         }
+        if (accessStatus === 'TOKEN_NOT_FOUND') {
+            return { view: requestAccessToken }
+        }
         return { view: confirmUser }
     }
 });
@@ -51,6 +57,13 @@ const confirmUser = new View('ConfirmUser', {
         const answer = prompt('Does this look correct? [Y/n]: ');
         if (/y/i.test(answer)) {
             return { view: permissionsReview }
+        }
+        else if (answer === null) {
+            return null;
+        }
+        else {
+            githubAccess.clearToken();
+            return { view: requestAccessToken }
         }
     }
 });

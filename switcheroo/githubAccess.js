@@ -36,6 +36,12 @@ class GithubAccess {
         return true;
     }
 
+    async clearToken() {
+        fs.unlinkSync(TOKEN_PATH);
+        this._agent = null;
+        cache.clear();
+    }
+
     async updateToken(token) {
         if (await this._validateToken(token)) {
             await this._saveToken(token);
@@ -49,6 +55,9 @@ class GithubAccess {
 
     getAuthenticatedUserDetails = cache.function(async () => {
         /** Returns the user object of the authenticated user **/
+        if (!this._agent) {
+            return null;
+        }
         const response = await this._agent.users.getAuthenticated();
         return response.data;
     });

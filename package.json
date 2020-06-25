@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "switcheroo": "switcheroo/index.js"
+    "swistcheroo": "switcheroo/index.js",
+    "flipswitch": "switcheroo/start"
   },
   "repository": {
     "type": "git",

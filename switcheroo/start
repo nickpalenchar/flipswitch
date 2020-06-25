@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo 'gonna sleep for a bit '
+
+trap 'raise(SIGTERM)' SIGINT
+
+switcheroo &
+
+sleep 20

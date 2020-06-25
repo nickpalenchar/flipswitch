@@ -7,7 +7,6 @@ const {say, assert} = require("../util");
 
 const updateBranches = new View('UpdateBranches', {
     run: async function(reposToUpdate) {
-        assert(reposToUpdate.length < 11);
         await githubAccess.initToken();
         const progressBar = terminal.progressBar({
             // width: 80,
@@ -39,6 +38,11 @@ async function updateBranchOnRepo(repo, newBranchName='main') {
     }
     catch (e) {
         //TODO{0} - propigate to error service?
+        if (!/empty repository/.test(e.stderr)) {
+            console.error('NICK LOOK NICK LOOK')
+            console.error(e)
+            console.error(JSON.stringify(e, null, 2))
+        }
         // console.error(e);
     }
     finally {

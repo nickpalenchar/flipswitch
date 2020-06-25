@@ -35,7 +35,7 @@ const readDisclosures = new View('ReadDisclosures', {
 
         //TODO{0} - Remove the slice (10)
         if (answer.selectedIndex === 0) {
-            return {view: updateBranches, args: [reposToUpdate.slice(0,10)] }
+            return {view: updateBranches, args: [reposToUpdate] }
         }
     }
 });
