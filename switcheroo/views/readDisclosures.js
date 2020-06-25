@@ -3,7 +3,7 @@ const {updateBranches} = require("./updateBranches");
 const {terminal} = require('terminal-kit')
 
 const {View} = require("./_abstracts");
-const {say} = require("../util");
+const {say, ask} = require("../util");
 const { GITHUB_DEFAULT_BRANCH_TOPIC_URL, LEGAL_DISCLOSURE } = require('../configs.json');
 const { OPTIONS } = require('../options');
 
@@ -28,10 +28,12 @@ const readDisclosures = new View('ReadDisclosures', {
         say.newline();
         say(`Update the default branch in ${chalk.yellow(reposToUpdate.length)} repos from ${chalk.red(OPTIONS.branchToChange)} to ${chalk.green(OPTIONS.renamedBranch)}?`);
 
-        const answer = await terminal.singleColumnMenu([
+        const answer = await ask.singleColumnMenu([
             chalk.red(' Yes - I\'ve read the above disclosures & understand the consequences '),
             ' No - select different repos ',
-            ' No - exit the program ']).promise;
+            ' No - exit the program '], {
+            exitOnCancel: true
+        });
 
         //TODO{0} - Remove the slice (10)
         if (answer.selectedIndex === 0) {

@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const {readDisclosures} = require("./readDisclosures");
 const {configureRepoSearch} = require("./configureRepoSearch");
 const {terminal} = require('terminal-kit');
-const {say} = require("../util");
+const {say, ask} = require("../util");
 const {githubAccess} = require("../githubAccess");
 const {View} = require("./_abstracts");
 const { exec } = require('child_process')
@@ -26,11 +26,11 @@ const gatherRepos = new View('GatherRepos', {
         say(chalk.bold('Total qualified repos found: ') + chalk.yellow(reposNeedingRename.length));
         reposNeedingRename.length > 30 && say(chalk.dim('(you might need to scroll up to see everything)'));
 
-        const response = await terminal.singleColumnMenu([
-                chalk.green("Yes - go to disclosures and final review"),
+        const response = await ask.singleColumnMenu([
+                "Yes - go to disclosures and final review",
                 "No - go back to repo selection",
                 "No - exit the program"
-            ]).promise;
+            ], {exitOnCancel: true});
         const nextViews = [{view: readDisclosures, args: [reposNeedingRename] }, {view: configureRepoSearch}, null];
         return nextViews[response.selectedIndex];
     }

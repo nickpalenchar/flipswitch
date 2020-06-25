@@ -2,7 +2,6 @@ const chalk = require('chalk');
 const {readDisclosures} = require("./readDisclosures");
 const {githubAccess} = require("../githubAccess");
 const {gatherRepos} = require("./gatherRepos");
-const {updateBranches} = require("./updateBranches");
 const {say, ask, sleep} = require("../util");
 const {View} = require("./_abstracts");
 const {APP_NAME} = require('../configs.json');
@@ -24,7 +23,7 @@ const configureRepoSearch = new View('ConfigureRepoSearch', {
 
         const answerKeyword = choices[userResponse.selectedText];
         if (answerKeyword === 'single') {
-            return { view: configureRepoSearch }
+            return { view: configureSingleRepo }
         }
         return { view: gatherRepos, args: [answerKeyword]}
     }
@@ -87,7 +86,7 @@ const handleSingleRepoQueryError = new View('HandleSingleRepoQueryError', {
             'Quit the program': null
         }
 
-        const { selectedText } = await terminal.singleColumnMenu(Object.keys(choicesToViews)).promise;
+        const { selectedText } = await ask.singleColumnMenu(Object.keys(choicesToViews), {exitOnCancel: true});
         return { view: choicesToViews[selectedText] };
     }
 })
