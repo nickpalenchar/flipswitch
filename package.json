@@ -20,9 +20,9 @@
   "author": "Nick Palenchar",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nickpalenchar/switcheroo/issues"
+    "url": "https://github.com/nickpalenchar/flipswitch/issues"
   },
-  "homepage": "https://github.com/nickpalenchar/switcheroo#readme",
+  "homepage": "https://github.com/nickpalenchar/flipswitch#readme",
   "dependencies": {
     "@octokit/rest": "^18.0.0",
     "axios": "^0.19.2",
