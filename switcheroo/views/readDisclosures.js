@@ -5,7 +5,7 @@ const {terminal} = require('terminal-kit')
 const {welcome} = require('./welcome')
 const {View} = require("./_abstracts");
 const {say, ask} = require("../util");
-const { GITHUB_DEFAULT_BRANCH_TOPIC_URL, LEGAL_DISCLOSURE } = require('../configs.json');
+const { GITHUB_DEFAULT_BRANCH_TOPIC_URL, LEGAL_DISCLOSURE, DOCS_LOCAL_BRANCH_UPDATE_URL, APP_NAME } = require('../configs.json');
 const { options } = require('../options');
 
 
@@ -20,12 +20,14 @@ const readDisclosures = new View('ReadDisclosures', {
         say.newline();
         say(chalk.inverse('Disclosure: You are using preview-status software.'))
         say('This is a fancy way of saying that this program is for experimental use and is not consider suitable ' +
-            'for production environments. While the author would love to assure you it\'s fine to use, understand the consequences before' +
+            'for production environments. While the author would love to assure you it\'s fine to use, understand the consequences before ' +
             'proceeding')
         say.newline();
-        say('Legally speaking:');
         say(LEGAL_DISCLOSURE);
         say.newline();
+        say(chalk.yellow(chalk.inverse('If you have a local clone of a repo, you will need to update the branch yourself.')))
+        say('Read more about this process here: ' + DOCS_LOCAL_BRANCH_UPDATE_URL)
+        say(chalk.gray('You can always revere the process with ' + APP_NAME + ' by switching the default branch and renamed branch in the prompts'))
         say.newline();
         say(`Update the default branch in ${chalk.yellow(reposToUpdate.length)} repos from ${chalk.red(options.get('branchToChange'))} to ${chalk.green(options.get('renamedBranch'))}?`);
 
