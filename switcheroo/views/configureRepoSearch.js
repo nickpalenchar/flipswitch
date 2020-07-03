@@ -5,21 +5,29 @@ const {gatherRepos} = require("./gatherRepos");
 const {say, ask, sleep} = require("../util");
 const {View} = require("./_abstracts");
 const {APP_NAME} = require('../configs.json');
-const {OPTIONS} = require('../options');
+const {options} = require('../options');
 const {terminal} = require('terminal-kit')
 
 const configureRepoSearch = new View('ConfigureRepoSearch', {
     run: async function() {
         say(chalk.cyan(`${APP_NAME} can rename branches on your repositories that are public, private, or both. You can also test with just an individual one.
         Which would you prefer?`));
-        const choices = {
+        let choices = {
             'Public and private repos (most dangerous)': 'all',
             'Public repos only': 'public',
             'Private repos only': 'private',
             'Specify one repo         (safest)': 'single'
         }
 
-        const userResponse = await ask.singleColumnMenu(Object.keys(choices), {exitOnCancel: true});
+        const scopes = await githubAccess.getOAuthScopes();
+        if (!scopes.includes('repo')) {
+            say(Object.keys(choices).slice(0,3).map(s => chalk.gray(' ' + s + chalk.italic(' (Insufficient permissions)'))).join('\n'))
+            delete choices['Public and private repos (most dangerous)'];
+            delete choices['Public repos only'];
+            delete choices['Private repos only'];
+        }
+
+        const userResponse = await ask.singleColumnMenu(Object.keys(choices), {exitOnCancel: true, y: terminal.height});
 
         const answerKeyword = choices[userResponse.selectedText];
         if (answerKeyword === 'single') {
@@ -43,13 +51,14 @@ const configureSingleRepo = new View('ConfigureSingleRepo', {
         catch (e) {
             console.error(e);
             await sleep(400);
-            return { view: handleSingleRepoQueryError, args: ['Something went WRANG']}
+            const additional = e.status === 404 ? '\nThe repository was not found (404)' : '';
+            return { view: handleSingleRepoQueryError, args: ['That input did\'t quite work' + additional]}
         }
         const checks = checkRepoMeetsRequirements(repoToUpdate);
         if (checks === 'DEFAULT_BRANCH_MISMATCH') {
             await sleep(400);
             return { view: handleSingleRepoQueryError,
-                args: [`The provided repo's default branch (${repoToUpdate.default_branch}) does not match the default branch name to update (${OPTIONS.branchToChange}). Please try a different Repo`]};
+                args: [`The provided repo's default branch (${repoToUpdate.default_branch}) does not match the default branch name to update (${options.get('branchToChange')}). Please try a different Repo`]};
         }
         if (checks === 'NON_ADMIN_PERMISSIONS') {
             await sleep(400)
@@ -63,7 +72,7 @@ const configureSingleRepo = new View('ConfigureSingleRepo', {
 });
 
 function checkRepoMeetsRequirements(repoData) {
-    if (repoData.default_branch !== OPTIONS.branchToChange) {
+    if (repoData.default_branch !== options.get('branchToChange')) {
         return 'DEFAULT_BRANCH_MISMATCH';
     }
     if (!repoData.permissions.admin) {

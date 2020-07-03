@@ -4,6 +4,7 @@ const {githubAccess} = require('../githubAccess');
 const branchUpdater = require('../controllers/branchUpdater');
 const {terminal} = require('terminal-kit');
 const {say, assert} = require("../util");
+const {options} = require('../options');
 
 const updateBranches = new View('UpdateBranches', {
     run: async function(reposToUpdate) {
@@ -19,7 +20,7 @@ const updateBranches = new View('UpdateBranches', {
         for (let i = 0; i < reposToUpdate.length; i++) {
             var repo = reposToUpdate[i];
             progressBar.startItem(repo.name);
-            await updateBranchOnRepo(repo) // TODO{0} - passing in options for different old/new branch rename here
+            await updateBranchOnRepo(repo, options.get('renamedBranch')) // TODO{0} - passing in options for different old/new branch rename here
             progressBar.itemDone(repo.name);
         }
         // progressBar.stop();
@@ -39,9 +40,13 @@ async function updateBranchOnRepo(repo, newBranchName='main') {
     catch (e) {
         //TODO{0} - propigate to error service?
         if (!/empty repository/.test(e.stderr)) {
-            console.error('NICK LOOK NICK LOOK')
-            console.error(e)
-            console.error(JSON.stringify(e, null, 2))
+            // console.error('NICK LOOK NICK LOOK')
+        }
+        if (e.status !== 422) {
+            console.log(chalk.red('We could not update repo ' + chalk.bold(repo)));
+            console.error(chalk.red('Error: ' + (e.message || e)));
+            console.log(chalk.gray('We will continue to try the remaining scheduled repos'))
+            // console.error(JSON.stringify(e, null, 2));
         }
         // console.error(e);
     }

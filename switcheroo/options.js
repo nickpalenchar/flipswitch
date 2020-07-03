@@ -1,9 +1,19 @@
 // Unlike config.json, these include options that can be modified by the end user
 
 
-const OPTIONS = {
+let OPTIONS = {
     branchToChange: 'master',
     renamedBranch: 'main'
 }
 
-module.exports = { OPTIONS }
+const options = {
+    get: function(option) {
+        return OPTIONS[option];
+    },
+    set: function(option, value) {
+        OPTIONS[option] = value;
+    }
+
+}
+
+module.exports = { options }

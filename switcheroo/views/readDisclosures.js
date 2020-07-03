@@ -1,11 +1,12 @@
 const chalk = require("chalk");
+const {configureRepoSearch} = require("./configureRepoSearch");
 const {updateBranches} = require("./updateBranches");
 const {terminal} = require('terminal-kit')
-
+const {configureSingleRepo} = require('./configureRepoSearch')
 const {View} = require("./_abstracts");
 const {say, ask} = require("../util");
 const { GITHUB_DEFAULT_BRANCH_TOPIC_URL, LEGAL_DISCLOSURE } = require('../configs.json');
-const { OPTIONS } = require('../options');
+const { options } = require('../options');
 
 
 const readDisclosures = new View('ReadDisclosures', {
@@ -17,7 +18,7 @@ const readDisclosures = new View('ReadDisclosures', {
         say(chalk.inverse('Warning: Updating the default branch'))
         say(`Changing your default branch can have unintended consequences that can affect new pull requests and clones. (More info: ${GITHUB_DEFAULT_BRANCH_TOPIC_URL})`);
         say.newline();
-        say(chalk.inverse('Disclosure: You are using alpha-status software.'))
+        say(chalk.inverse('Disclosure: You are using preview-status software.'))
         say('This is a fancy way of saying that this program is for experimental use and is not consider suitable ' +
             'for production environments. While the author would love to assure you it\'s fine to use, understand the consequences before' +
             'proceeding')
@@ -26,19 +27,26 @@ const readDisclosures = new View('ReadDisclosures', {
         say(LEGAL_DISCLOSURE);
         say.newline();
         say.newline();
-        say(`Update the default branch in ${chalk.yellow(reposToUpdate.length)} repos from ${chalk.red(OPTIONS.branchToChange)} to ${chalk.green(OPTIONS.renamedBranch)}?`);
+        say(`Update the default branch in ${chalk.yellow(reposToUpdate.length)} repos from ${chalk.red(options.get('branchToChange'))} to ${chalk.green(options.get('renamedBranch'))}?`);
 
         const answer = await ask.singleColumnMenu([
             chalk.red(' Yes - I\'ve read the above disclosures & understand the consequences '),
             ' No - select different repos ',
             ' No - exit the program '], {
-            exitOnCancel: true
+            exitOnCancel: false
         });
+        console.log(answer)
 
         //TODO{0} - Remove the slice (10)
         if (answer.selectedIndex === 0) {
             return {view: updateBranches, args: [reposToUpdate] }
         }
+        if (answer.selectedIndex === 1) {
+            console.log('ok got here what now');
+            return {view: updateBranches, args: [] }
+        }
+        return {view: configureRepoSearch }
+
     }
 });
 

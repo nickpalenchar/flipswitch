@@ -9,10 +9,9 @@ const {welcome} = require("./views/welcome");
 const {CliController} = require("./cliController");
 const { githubAccess: gh, INVALID_TOKEN } = require('./githubAccess');
 
+
 gh.initToken();
 const viewController = new CliController(3);
-// viewController.run(configureSingleRepo)
-// viewController.run(updateBranches, [{name: 'tminus', git_url: 'https://github.com/nickpalenchar/tminus.git', default_branch: 'master'}])
 viewController.run(welcome)
 .then(data => console.log('goodbye'))
     .catch(err => {

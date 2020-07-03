@@ -8,19 +8,30 @@ const {View} = require("./_abstracts");
 const { exec } = require('child_process')
 const {Spinner} = require('cli-spinner')
 
-const { OPTIONS } = require('../options');
+const { options } = require('../options');
 
 
 const gatherRepos = new View('GatherRepos', {
     run: async function(repoAccess) {
-        // say('Just a moment while I gather your Repos with access ' + repoAccess);
         const spinner = new Spinner('Just a moment while I gather your Repos with access ' + repoAccess);
         spinner.setSpinnerString(12);
         spinner.start();
-        const repos = await githubAccess.getOwnerRepos({access: repoAccess});
-        const reposNeedingRename = repos.filter(repo => !repo.fork && repo.default_branch === OPTIONS.branchToChange);
+        let repos;
+        try {
+            repos = await githubAccess.getOwnerRepos({access: repoAccess});
+        } catch(e) {
+            if (e.response.status === 401) {
+                console.log(e.config.headers['X-Accepted-OAuth-Scopes'])
+                say.newline();
+                say(chalk.red('Error, you don\'t have correct permissions for this scope.'));
+                say('Generate a new token and try again.')
+                process.exit(1);
+            }
+            process.exit(1);
+        }
+        const reposNeedingRename = repos.filter(repo => !repo.fork && repo.default_branch === options.get('branchToChange'));
 
-        reposNeedingRename.forEach(repo => say('* ' + repo.name, repo.forks_count));
+        reposNeedingRename.forEach(repo => say('* ' + repo.name));
         spinner.stop(false);
         say.newline();
         say(chalk.bold('Total qualified repos found: ') + chalk.yellow(reposNeedingRename.length));

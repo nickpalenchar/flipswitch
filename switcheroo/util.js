@@ -28,6 +28,9 @@ const ask = {
 
 
         return answer;
+    },
+    inputField: async function(...args) {
+        return await terminal.inputField(...args).promise;
     }
 }
 

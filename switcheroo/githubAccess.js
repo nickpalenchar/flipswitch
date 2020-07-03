@@ -9,7 +9,7 @@ const { APP_NAME } = require('./configs.json')
 
 const TOKEN_NOT_FOUND = 'TOKEN_NOT_FOUND';
 const INVALID_TOKEN = 'INVALID_TOKEN';
-const TOKEN_PATH = `${process.env.HOME}/.switcheroo/token`
+const TOKEN_PATH = `${process.env.HOME}/.flipswitch/token`
 const _LIST_REPOS_ENDPOINT = 'https://api.github.com/user/repos'
 
 const cache = new Cache();
@@ -18,7 +18,7 @@ class GithubAccess {
 
     _agent;
 
-    constructor(path=`${process.env.HOME}/.switcheroo/token`) {
+    constructor(path=`${process.env.HOME}/.flipswitch/token`) {
         this.tokenPath = path;
     }
 
@@ -74,6 +74,13 @@ class GithubAccess {
         else {
             throw new ReferenceError(`don't know what to do with ${access}`);
         }
+    }.bind(this));
+
+    getOAuthScopes = cache.function(async function(options) {
+        return await this._agent.users.getAuthenticated()
+            .then(data => data.headers['x-oauth-scopes']
+                .replace(/\s/g, '')
+                .split(','));
     }.bind(this));
 
     async updateRepoDefaultBranch(repo, newBranchName) {
@@ -156,11 +163,11 @@ class GithubAccess {
     async _validateToken(token) {
         const octokit = new Octokit({
             auth: token,
-            userAgent: 'switcheroo v0.1.0'
+            userAgent: 'flipswitch v0.1.0'
         });
 
         try {
-            await octokit.users.getAuthenticated();
+            let result = await octokit.users.getAuthenticated();
             return octokit;
         } catch (e) {
             return false;
