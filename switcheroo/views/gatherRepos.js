@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 const {readDisclosures} = require("./readDisclosures");
-const {configureRepoSearch} = require("./configureRepoSearch");
+const {permissionsReview} = require("./permissionsReview");
 const {terminal} = require('terminal-kit');
 const {say, ask} = require("../util");
 const {githubAccess} = require("../githubAccess");
@@ -42,7 +42,10 @@ const gatherRepos = new View('GatherRepos', {
                 "No - go back to repo selection",
                 "No - exit the program"
             ], {exitOnCancel: true});
-        const nextViews = [{view: readDisclosures, args: [reposNeedingRename] }, {view: configureRepoSearch}, null];
+        const nextViews = [
+            {view: readDisclosures, args: [reposNeedingRename] },
+            {view: require('./configureRepoSearch').configureRepoSearch, args: []},
+            null];
         return nextViews[response.selectedIndex];
     }
 });

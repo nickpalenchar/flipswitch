@@ -2,7 +2,7 @@ const chalk = require("chalk");
 const {configureRepoSearch} = require("./configureRepoSearch");
 const {updateBranches} = require("./updateBranches");
 const {terminal} = require('terminal-kit')
-const {configureSingleRepo} = require('./configureRepoSearch')
+const {welcome} = require('./welcome')
 const {View} = require("./_abstracts");
 const {say, ask} = require("../util");
 const { GITHUB_DEFAULT_BRANCH_TOPIC_URL, LEGAL_DISCLOSURE } = require('../configs.json');
@@ -35,17 +35,14 @@ const readDisclosures = new View('ReadDisclosures', {
             ' No - exit the program '], {
             exitOnCancel: false
         });
-        console.log(answer)
 
         //TODO{0} - Remove the slice (10)
         if (answer.selectedIndex === 0) {
             return {view: updateBranches, args: [reposToUpdate] }
         }
         if (answer.selectedIndex === 1) {
-            console.log('ok got here what now');
-            return {view: updateBranches, args: [] }
+            return {view: require('./configureRepoSearch').configureRepoSearch, args: [] }
         }
-        return {view: configureRepoSearch }
 
     }
 });

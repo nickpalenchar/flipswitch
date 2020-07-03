@@ -11,7 +11,7 @@ const { githubAccess: gh, INVALID_TOKEN } = require('./githubAccess');
 
 
 gh.initToken();
-const viewController = new CliController(3);
+const viewController = new CliController(0);
 viewController.run(welcome)
 .then(data => console.log('goodbye'))
     .catch(err => {

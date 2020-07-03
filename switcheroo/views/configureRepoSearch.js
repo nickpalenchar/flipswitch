@@ -45,11 +45,11 @@ const configureSingleRepo = new View('ConfigureSingleRepo', {
         try {
             const [ owner, repo ] = response.match(/(?:https?:\/\/)?github.com\/([a-zA-Z0-9_.-]*)\/([a-zA-Z0-9_.-]*)/).slice(1,3);
             console.log();
-            console.log('inputzzz', owner, repo)
+            // console.log('inputzzz', owner, repo)
             var repoToUpdate = await githubAccess.getRepo(owner, repo);
         }
         catch (e) {
-            console.error(e);
+            // console.error(e);
             await sleep(400);
             const additional = e.status === 404 ? '\nThe repository was not found (404)' : '';
             return { view: handleSingleRepoQueryError, args: ['That input did\'t quite work' + additional]}

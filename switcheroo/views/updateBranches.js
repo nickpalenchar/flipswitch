@@ -5,6 +5,7 @@ const branchUpdater = require('../controllers/branchUpdater');
 const {terminal} = require('terminal-kit');
 const {say, assert} = require("../util");
 const {options} = require('../options');
+const chalk = require('chalk');
 
 const updateBranches = new View('UpdateBranches', {
     run: async function(reposToUpdate) {
@@ -23,7 +24,9 @@ const updateBranches = new View('UpdateBranches', {
             await updateBranchOnRepo(repo, options.get('renamedBranch')) // TODO{0} - passing in options for different old/new branch rename here
             progressBar.itemDone(repo.name);
         }
-        // progressBar.stop();
+        progressBar.stop();
+        say.newline();
+        say(chalk.green('Done! Thanks for flipping the switch 💃'))
 
     }
 });
@@ -42,11 +45,10 @@ async function updateBranchOnRepo(repo, newBranchName='main') {
         if (!/empty repository/.test(e.stderr)) {
             // console.error('NICK LOOK NICK LOOK')
         }
-        if (e.status !== 422) {
-            console.log(chalk.red('We could not update repo ' + chalk.bold(repo)));
+        if (e.status === 422) {
+            console.log(chalk.red('We could not update repo ' + chalk.bold(repo.name)));
             console.error(chalk.red('Error: ' + (e.message || e)));
             console.log(chalk.gray('We will continue to try the remaining scheduled repos'))
-            // console.error(JSON.stringify(e, null, 2));
         }
         // console.error(e);
     }

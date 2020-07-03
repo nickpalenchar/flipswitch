@@ -11,7 +11,6 @@ class Cache {
             return this._asyncFunction(fn);
         }
         return (function(...args) {
-            console.log('RUNNING')
             const hash = this._hashFunction(fn, args);
             if (this._cache[hash]) {
                 return this._cache[hash].returnValue;
@@ -40,7 +39,7 @@ class Cache {
     }
 
     _hashFunction(fn, ...args) {
-        return fn.toString() + args.toString();
+        return fn.toString() + args.join(':');
     }
 }
 

@@ -62,7 +62,7 @@ class GithubAccess {
         return response.data;
     });
 
-    getOwnerRepos = cache.function(async function (options) {
+    async getOwnerRepos(options) {
         assert(typeof options === 'object');
 
         if (options.hasOwnProperty('access')) {
@@ -74,7 +74,7 @@ class GithubAccess {
         else {
             throw new ReferenceError(`don't know what to do with ${access}`);
         }
-    }.bind(this));
+    };
 
     getOAuthScopes = cache.function(async function(options) {
         return await this._agent.users.getAuthenticated()
@@ -94,7 +94,7 @@ class GithubAccess {
             });
         }
         catch (e) {
-            console.log(e) // TODO{0} - graceful error handling.
+            // console.log(e) // TODO{0} - graceful error handling.
         }
     }
 
