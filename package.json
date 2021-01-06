@@ -25,7 +25,7 @@
   "homepage": "https://github.com/nickpalenchar/flipswitch#readme",
   "dependencies": {
     "@octokit/rest": "^18.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "cli-spinner": "^0.2.10",
     "prompt-sync": "^4.2.0",
