@@ -29,6 +29,6 @@
     "chalk": "^4.1.0",
     "cli-spinner": "^0.2.10",
     "prompt-sync": "^4.2.0",
-    "terminal-kit": "^1.35.7"
+    "terminal-kit": "^3.0.0"
   }
 }
